@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 引入JQuery的相关文件
+         JQuery.js要在Bootstrap之前引入，因为Bootstrap.js
+         是在JQuery的基础上实现的
+     -->
+    <script type="application/javascript"
+            src="static/jquery-3.6.1.min.js">
+    </script>
+    <!-- 引入Bootstrap的相关文件 -->
+    <script type="application/javascript"
+            src="static/bootstrap.min.js"></script>
+    <link type="text/css"
+          rel="stylesheet"
+          href="static/bootstrap.min.css"/>
+    <style type="text/css">
+        body{
+            padding: 100px;
+        }
+    </style>
+</head>
+<body>
+    <button type="button" class="btn btn-primary" onclick="toAdd()">新增员工</button>
+    <table id="employee-table" class="table table-bordered">
+        <thead>
+            <tr>
+                <td>姓名</td>
+                <td>工号</td>
+                <td>年龄</td>
+                <td>性别</td>
+                <td>工作年限</td>
+                <td>月薪</td>
+                <td>所在城市</td>
+                <td>工作地点</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</body>
+<script type="application/javascript">
+    $(function (){
+        // 页面元素加载完毕 发送请求获取员工列表数据
+        getList();
+    })
+    function getList(){
+        $.ajax({
+            url:'http://localhost:8080/EtoakEmployeeExam_war_exploded/employee',
+            type:'POST',
+            data:{
+                method:'getList'
+            },
+            success:function (res){
+                console.log(res);
+                var employeeList = res.data;
+                var dataStr = "";
+                employeeList.forEach((item,index)=>{
+                    dataStr += "<tr>";
+                    dataStr += "<td>" + item.name + "</td>";
+                    dataStr += "<td>" + item.etoakNo + "</td>";
+                    dataStr += "<td>" + item.age + "</td>";
+                    dataStr += "<td>" + item.gender + "</td>";
+                    dataStr += "<td>" + item.workTime + "</td>";
+                    dataStr += "<td>" + item.salary + "</td>";
+                    dataStr += "<td>" + item.city + "</td>";
+                    dataStr += "<td>" + item.workPlace + "</td>";
+                    dataStr += "<tr>"
+                        +"<button onclick='deleteById("+item.id+")' type='button' class='btn btn-danger'>更新</button></tr>"
+                        +"<button onclick='deleteById("+item.id+")' type='button' class='btn btn-danger'>删除</button></td>"
+                    +"</tr>"
+                    dataStr += "</tr>";
+                })
+                $("tbody").html(dataStr);
+            }
+        })
+    }
+    function updateById(id){
+        $(location).attr("href",'editEmployee.html?id='+id);
+    }
+
+    function deleteById(id){
+        $.ajax({
+            url:'http://localhost:8080/EtoakEmployeeExam_war_exploded/employee',
+            type: 'POST',
+            data:{
+                method:'delete',
+                id:id
+            },
+            success:function (res){
+                alert(res.msg);
+                getList()
+            }
+        })
+    }
+    function toAdd(){
+        $(location).attr("href","addEmployee.html");
+    }
+</script>
+</html>

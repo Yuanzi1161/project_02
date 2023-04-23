@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+        >
+<mapper namespace="com.etoak.java.dao.EtEmployeeInfoDao">
+
+    <resultMap id="EtoakResultMap" type="com.etoak.java.bean.EtEmployeeInfo">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="etoak_no" property="etoakNo"></result>
+        <result column="gender" property="gender"></result>
+        <result column="age" property="age"></result>
+        <result column="work_time" property="workTime"></result>
+        <result column="salary" property="salary"></result>
+        <result column="city" property="city"></result>
+        <result column="work_place" property="workPlace"></result>
+        <result column="status" property="status"></result>
+    </resultMap>
+
+    <resultMap id="CityNumberResultMap" type="com.etoak.java.bean.CityNumber">
+        <result column="city" property="city"></result>
+        <result column="number" property="number"></result>
+    </resultMap>
+
+    <insert id="addEmployee" parameterType="com.etoak.java.bean.EtEmployeeInfo">
+        insert into
+            et_employee_info(name,etoak_no,gender,age,work_time,salary,city,work_place,status)
+            values(#{name},#{etoakNo},#{gender},#{age},#{workTime},#{salary},#{city},#{workPlace},#{status})
+    </insert>
+
+    <select id="getAllEmployees" resultMap="EtoakResultMap">
+        select * from et_employee_info
+    </select>
+
+    <select id="getEmployeeByWorkTime" resultMap="EtoakResultMap">
+        select * from et_employee_info where work_time <![CDATA[ < ]]> #{workTime}
+    </select>
+
+    <select id="getEmployeeByCityAndStatus" resultMap="EtoakResultMap">
+        select * from et_employee_info where city = #{city} and status = #{status}
+    </select>
+
+    <select id="getCityNumber"
+        resultMap="CityNumberResultMap">
+        SELECT city,SUM(1) AS number FROM et_employee_info GROUP BY city
+    </select>
+
+    <update id="updateStatusById"
+        parameterType="integer">
+        update et_employee_info set status = 1 where id = #{id}
+    </update>
+
+    <delete id="deleteByStatus">
+        delete from et_employee_info where status = 1
+    </delete>
+
+    <!--
+        在Mybatis中，无法直接使用 < 号，因为与<>的左括号冲突
+        ① 转移字符 &lt;
+        ② 使用代码块包裹<号 <![CDATA[ < ]]>
+    -->
+    <select id="getAwardList">
+        SELECT
+        name,etoak_no,
+        CASE WHEN work_time <![CDATA[ < ]]> 1 THEN 0
+        WHEN work_time >= 1 AND work_time <![CDATA[ < ]]> 3 THEN 10000
+        ELSE 20000 END AS award
+        FROM et_employee_info
+    </select>
+
+    <delete id="deleteById" parameterType="integer">
+        delete from et_employee_info where id = #{id}
+    </delete>
+</mapper>

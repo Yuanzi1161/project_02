@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Etoak员工管理</title>
+</head>
+<body>
+    <input id="employeeId" value="123" type="text" placeholder="请输入员工ID"/>
+    <button id="deleteBtn">删除</button>
+</body>
+<script type="application/javascript">
+    // 先获取到用户在员工ID输入框中输入的数值
+    //var deleteBtn = document.getElementById("deleteBtn");
+    deleteBtn.addEventListener('click',function (){
+        var deleteId =
+            document.getElementById("employeeId").value;
+       // 点击事件所触发的函数体
+        //alert("要删除的ID是："  + deleteId);
+        // JS中如何发送请求？
+        // 同步请求 和 异步请求
+        // 创建HTTP请求
+        /*var xhr = new XMLHttpRequest();
+        xhr.open("get","http://localhost:8080/EtoakEmployeeExam_war_exploded/delete.do?id="+deleteId);
+        xhr.send();
+
+        xhr.onreadystatechange = function (){
+            if( xhr.readyState == 4 && xhr.status == 200){
+                alert(xhr.responseText);
+            }
+        }*/
+        var xhr = new XMLHttpRequest();
+        xhr.open("post","http://localhost:8080/EtoakEmployeeExam_war_exploded/delete.do");
+        var data = "id=2"
+        xhr.send(JSON.stringify(data));
+
+        xhr.onreadystatechange = function (){
+            if( xhr.readyState == 4 && xhr.status == 200){
+                alert(xhr.responseText);
+            }
+        }
+    });
+</script>
+</html>

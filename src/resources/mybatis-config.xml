@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 命名空间 -->
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd"
+        >
+<!-- 根元素 -->
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--开启控制台打印SQL-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <!-- 环境配置 -->
+    <environments default="dev">
+        <environment id="dev">
+            <!-- 事务管理 -->
+            <transactionManager type="JDBC"></transactionManager>
+            <!-- 内建数据源的类型 JNDI  POOLED  UNPOOLED-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value=""/>
+                <property name="username" value=""/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mapper/EtEmployeeInfoMapper.xml"></mapper>
+    </mappers>
+</configuration>
